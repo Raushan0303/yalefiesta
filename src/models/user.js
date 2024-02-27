@@ -1,60 +1,16 @@
-import mongoose from "mongoose";
+// userSchema.js
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-const userSchema = new mongoose.Schema(
-  {
-    username: {
-      type: String,
-      required: true,
-      unique: true,
-      min: 3,
-      max: 20,
-    },
-    email: {
-      type: String,
-      required: true,
-      unique: true,
-      max: 50,
-    },
-    password: {
-      type: String,
-    },
-    img: {
-      type: String,
-    },
-    isAdmin: {
-      type: Boolean,
-      default: false,
-    },
-  },
-  { timestamps: true }
-);
+const userSchema = new Schema({
+    name: { type: String, required: true },
+    email: { type: String, required: true },
+    password: { type: String, required: true },
+    branch: { type: Schema.Types.ObjectId, ref: 'Branch', required: true },
+    eventsRegistered: [{ type: Schema.Types.ObjectId, ref: 'Event' }],
+    // Add more user schema fields as needed
+});
 
-const postSchema = new mongoose.Schema(
-  {
-    title: {
-      type: String,
-      required: true,
-    },
-    desc: {
-      type: String,
-      required: true,
-    },
-    img: {
-      type: String,
-    },
-    userId: {
-      type: String,
-      required: true,
-    },
-    slug: {
-      type: String,
-      required: true,
-      unique: true,
-    },
-  },
-  { timestamps: true }
-  // timestamps create creation date
-);
+const User = mongoose.model('User', userSchema);
 
-export const User = mongoose.models?.User || mongoose.model("User", userSchema);
-export const Post = mongoose.models?.Post || mongoose.model("Post", postSchema);
+module.exports = User;
